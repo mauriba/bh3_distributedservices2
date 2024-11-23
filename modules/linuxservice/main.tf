@@ -1,15 +1,15 @@
 resource "azurerm_public_ip" "linuxservice" {
   count               = var.enable_public_ip == false ? 0 : 1
   name                = "pip-vm-${var.hostname}"
-  resource_group_name = var.subnet.resource_group_name
+  resource_group_name = var.resource_group.name
   allocation_method   = "Dynamic"
-  location            = var.subnet.location
+  location            = var.resource_group.location
 }
 
 resource "azurerm_network_interface" "linuxservice" {
   name                = "nic-vm-${var.hostname}"
-  resource_group_name = var.subnet.resource_group_name
-  location            = var.subnet.location
+  resource_group_name = var.resource_group.name
+  location            = var.resource_group.location
 
   ip_configuration {
     name                          = "internal"
@@ -22,8 +22,8 @@ resource "azurerm_network_interface" "linuxservice" {
 
 resource "azurerm_linux_virtual_machine" "example" {
   name                            = "vm-${var.hostname}"
-  resource_group_name             = var.subnet.resource_group_name
-  location                        = var.subnet.location
+  resource_group_name             = var.resource_group.name
+  location                        = var.resource_group.location
   size                            = "Standard_B2s"
   admin_username                  = "loc_sysadmin"
   disable_password_authentication = false

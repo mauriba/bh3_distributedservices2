@@ -1,12 +1,18 @@
 variable "subnet" {
   type = object({
-    id                  = string
-    address_prefixes    = list(string)
-    resource_group_name = string
-    location            = string
+    id               = string
+    address_prefixes = list(string)
   })
   nullable    = false
   description = "The subnet to deploy the Linux Service in"
+}
+
+variable "resource_group" {
+  type = object({
+    name     = string
+    location = string
+  })
+  description = "The resource group to deploy the Linux Service in"
 }
 
 variable "hostname" {
