@@ -44,3 +44,29 @@ resource "azurerm_linux_virtual_machine" "linuxservice" {
     version   = var.image.version
   }
 }
+
+# Add auto shutdown schedules to save costs
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "linuxservice-3pm" {
+  virtual_machine_id = azurerm_linux_virtual_machine.linuxservice.id
+  location           = var.resource_group.location
+  enabled            = true
+
+  daily_recurrence_time = "1500"
+  timezone              = "W. Europe Standard Time"
+
+  notification_settings {
+    enabled = false
+  }
+}
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "linuxservice-0am" {
+  virtual_machine_id = azurerm_linux_virtual_machine.linuxservice.id
+  location           = var.resource_group.location
+  enabled            = true
+
+  daily_recurrence_time = "0000"
+  timezone              = "W. Europe Standard Time"
+
+  notification_settings {
+    enabled = false
+  }
+}
