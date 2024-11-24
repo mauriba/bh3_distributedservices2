@@ -48,8 +48,8 @@ variable "image" {
   })
   default = {
     publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
+    offer     = "ubuntu-24_04-lts" 
+    sku       = "minimal"
     version   = "latest"
   }
   description = "The image to use for the Linux Service VM"

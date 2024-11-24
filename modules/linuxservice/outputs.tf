@@ -5,3 +5,7 @@ output "network_interface" {
 output "virtual_machine" {
   value = azurerm_linux_virtual_machine.linuxservice
 }
+
+output "hostname" {
+  value = var.hostname
+}
