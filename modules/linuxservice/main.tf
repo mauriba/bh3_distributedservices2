@@ -2,7 +2,7 @@ resource "azurerm_public_ip" "linuxservice" {
   count               = var.enable_public_ip == false ? 0 : 1
   name                = "pip-vm-${var.hostname}"
   resource_group_name = var.resource_group.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
   location            = var.resource_group.location
 }
 
@@ -16,11 +16,11 @@ resource "azurerm_network_interface" "linuxservice" {
     subnet_id                     = var.subnet.id
     private_ip_address_allocation = var.private_ip != null ? "Static" : "Dynamic"
     private_ip_address            = var.private_ip != null ? var.private_ip : null
-    public_ip_address_id          = var.enable_public_ip ? azurerm_public_ip.linuxservice.id : null
+    public_ip_address_id          = var.enable_public_ip ? azurerm_public_ip.linuxservice[0].id : null
   }
 }
 
-resource "azurerm_linux_virtual_machine" "example" {
+resource "azurerm_linux_virtual_machine" "linuxservice" {
   name                            = "vm-${var.hostname}"
   resource_group_name             = var.resource_group.name
   location                        = var.resource_group.location

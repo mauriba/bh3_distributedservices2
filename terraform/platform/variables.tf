@@ -18,3 +18,9 @@ variable "stage" {
     error_message = "Stage must be either dev, prd or qas"
   }
 }
+
+variable "password" {
+  description = "The local password used for the VMs on initial deployment"
+  type        = string
+  sensitive   = true
+}
