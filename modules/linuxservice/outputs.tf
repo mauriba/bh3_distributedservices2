@@ -9,3 +9,7 @@ output "virtual_machine" {
 output "hostname" {
   value = var.hostname
 }
+
+output "public_ip" {
+  value = azurerm_public_ip.linuxservice[0].ip_address
+}
