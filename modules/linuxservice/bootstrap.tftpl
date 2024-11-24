@@ -1,7 +1,6 @@
 #! /usr/bin/env bash
 
 set -euo pipefail
-script /bootstrap.log
 
 # Basic tools
 sudo apt-get update
@@ -30,8 +29,6 @@ fi
 
 if [ -f "$INIT_SCRIPT" ]; then
   chmod +x "$INIT_SCRIPT"
-  source "$INIT_SCRIPT"
+  $INIT_SCRIPT &> /bootstrap.log
 fi
 # endsection
-
-exit
