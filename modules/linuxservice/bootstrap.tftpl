@@ -1,6 +1,7 @@
 #! /usr/bin/env bash
 
 set -euo pipefail
+script /bootstrap.log
 
 # Basic tools
 sudo apt-get update
@@ -17,7 +18,7 @@ SETUP_DIR="/setup"
 BOOTSTRAP_SERVER_DIR="$SETUP_DIR/bootstrap/${hostname}"
 INIT_SCRIPT="$BOOTSTRAP_SERVER_DIR/init.sh"
 
-echo "Bootstrapping will take place in: $BOOTSTRAP_SERVER_DIR" > "/bootstrap.log"
+echo "Bootstrapping will take place in: $BOOTSTRAP_SERVER_DIR"
 
 if [ ! -d "$SETUP_DIR" ]; then
   git clone "$REPO_URL" "$SETUP_DIR" || { echo "Failed to clone repository."; exit 1; }
@@ -29,7 +30,8 @@ fi
 
 if [ -f "$INIT_SCRIPT" ]; then
   chmod +x "$INIT_SCRIPT"
-  source "$INIT_SCRIPT
+  source "$INIT_SCRIPT"
 fi
-
 # endsection
+
+exit
