@@ -21,7 +21,7 @@ resource "azurerm_network_security_group" "terminalserver" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    destination_address_prefix = module.terminalserver.network_interface.ip_configuration[0].private_ip_address
+    destination_address_prefix = "*"    # Can be any because the NSG is only attached to 1 host anyways
     source_address_prefix      = "*"
   }
 }
