@@ -17,6 +17,8 @@ SETUP_DIR="/setup"
 BOOTSTRAP_SERVER_DIR="$SETUP_DIR/bootstrap/${hostname}"
 INIT_SCRIPT="$BOOTSTRAP_SERVER_DIR/init.sh"
 
+echo "Bootstrapping will take place in: $BOOTSTRAP_SERVER_DIR" > "/bootstrap.log"
+
 if [ ! -d "$SETUP_DIR" ]; then
   git clone "$REPO_URL" "$SETUP_DIR" || { echo "Failed to clone repository."; exit 1; }
 fi

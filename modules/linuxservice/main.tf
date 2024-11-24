@@ -4,6 +4,9 @@ resource "azurerm_public_ip" "linuxservice" {
   resource_group_name = var.resource_group.name
   allocation_method   = "Static"
   location            = var.resource_group.location
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "azurerm_network_interface" "linuxservice" {
