@@ -11,5 +11,5 @@ output "hostname" {
 }
 
 output "public_ip" {
-  value = azurerm_public_ip.linuxservice[0].ip_address
+  value = var.enable_public_ip ? azurerm_public_ip.linuxservice[0].ip_address : null
 }

@@ -14,6 +14,19 @@ resource "azurerm_network_security_group" "platform" {
   resource_group_name = azurerm_resource_group.platform_network.name
 
   security_rule {
+    name                       = "allow_ssh_to_terminalserver"
+    priority                   = 190
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "192.168.20.4/32"
+  }
+
+  # NOTE: In a real environment, this rule should be more restrictive and probably only allow http/s
+  security_rule {
     name                       = "allow-all-outbound"
     priority                   = 200
     direction                  = "Outbound"
@@ -26,14 +39,14 @@ resource "azurerm_network_security_group" "platform" {
   }
 
   security_rule {
-    name                       = "deny_all_inbound"
-    priority                   = 300
+    name                       = "allow-ssh-from-terminalserver"
+    priority                   = 280
     direction                  = "Inbound"
-    access                     = "Deny"
-    protocol                   = "*"
+    access                     = "Allow"
+    protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "192.168.20.4" # NOTE: Insert ip of terminalserver 
     destination_address_prefix = "*"
   }
 
@@ -48,6 +61,18 @@ resource "azurerm_network_security_group" "platform" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+
+  security_rule {
+    name                       = "deny_all_inbound"
+    priority                   = 400
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
 }
 
 resource "azurerm_virtual_network" "platform" {
@@ -55,9 +80,8 @@ resource "azurerm_virtual_network" "platform" {
   location            = azurerm_resource_group.platform_network.location
   resource_group_name = azurerm_resource_group.platform_network.name
   address_space       = ["192.168.20.0/24"]
-  # TODO : Add DNS servers
+  # TODO: Insert ip of domain controller
   dns_servers = []
-
 }
 
 resource "azurerm_subnet" "platform" {
@@ -65,4 +89,9 @@ resource "azurerm_subnet" "platform" {
   resource_group_name  = azurerm_resource_group.platform_network.name
   virtual_network_name = azurerm_virtual_network.platform.name
   address_prefixes     = ["192.168.20.0/24"]
+}
+
+resource "azurerm_subnet_network_security_group_association" "platform" {
+  subnet_id                 = azurerm_subnet.platform.id
+  network_security_group_id = azurerm_network_security_group.platform.id
 }
