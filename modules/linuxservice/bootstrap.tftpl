@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+# Basic tools
+sudo apt-get update
+sudo apt install -y curl wget gnupg
+sudo apt-get install -y ldap-utils
+sudo apt install -y git dnsutils
+
+# Neovim editor
+sudo apt-get install -y neovim
+
+# section Bootstrap this server's custom config
+REPO_URL="https://github.com/mauriba/bh3_distributedservices2"
+SETUP_DIR="/setup"
+BOOTSTRAP_SERVER_DIR="$SETUP_DIR/bootstrap/${hostname}"
+INIT_SCRIPT="$BOOTSTRAP_SERVER_DIR/init.sh"
+
+if [ ! -d "$SETUP_DIR" ]; then
+  git clone "$REPO_URL" "$SETUP_DIR" || { echo "Failed to clone repository."; exit 1; }
+fi
+
+if [ -d "$BOOTSTRAP_SERVER_DIR" ]; then
+  cd "$BOOTSTRAP_SERVER_DIR" 
+fi
+
+if [ -f "$INIT_SCRIPT" ]; then
+  chmod +x "$INIT_SCRIPT"
+  source "$INIT_SCRIPT
+fi
+
+# endsection

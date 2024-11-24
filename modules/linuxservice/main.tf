@@ -27,6 +27,7 @@ resource "azurerm_linux_virtual_machine" "linuxservice" {
   size                            = "Standard_B2s"
   admin_username                  = "loc_sysadmin"
   disable_password_authentication = false
+  user_data                       = base64encode(templatefile("${path.module}/bootstrap.tftpl", { hostname = var.hostname }))
   admin_password                  = var.password
   network_interface_ids = [
     azurerm_network_interface.linuxservice.id
